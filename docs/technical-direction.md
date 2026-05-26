@@ -2,17 +2,23 @@
 
 This document is intentionally lightweight for now. The repo should not commit to an app structure until the first experience is designed clearly enough.
 
-## Current Recommendation
+## Decision
 
-Start with a modern frontend stack that can support a cinematic scroll experience without making the first phase too heavy.
+Use **Vite + React + TypeScript** for phase 1.
 
-Likely direction:
+Add:
 
-- React-based app.
-- Vite or Next.js.
+- GSAP for animation timelines.
+- `@gsap/react` for React integration.
 - GSAP ScrollTrigger for scroll-linked animation.
 - Lenis for smooth scrolling.
-- Three.js only if the visual concept truly needs 3D.
+- Three.js later only if the visual concept truly needs 3D.
+
+## Why This Decision
+
+Phase 1 is a crafted one-page scroll experience. It needs speed, direct control, and animation flexibility more than routing or server features.
+
+Vite gives a light development setup. React gives us clean component boundaries for scenes and reusable visual elements. TypeScript gives the project structure as it grows. GSAP ScrollTrigger is a proven choice for the kind of cinematic scroll behavior this portfolio needs. Lenis helps give the scroll a smoother, more deliberate feel.
 
 ## Stack Options
 
@@ -61,11 +67,9 @@ Tradeoff:
 
 ## Current Lean
 
-Use **Vite + React** for phase 1 unless the project quickly demands case-study routing or server features.
+The stack decision for phase 1 is **Vite + React + TypeScript**.
 
-Reason:
-
-Phase 1 is about a polished, cinematic one-page prototype. Vite keeps the first build focused and avoids framework weight while we explore the interaction language.
+Next.js can be reconsidered later if the portfolio grows into multiple project case-study pages, a blog, or more SEO-heavy content.
 
 ## Libraries To Consider Later
 
