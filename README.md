@@ -4,6 +4,19 @@ A cinematic portfolio concept for a travelling software engineer and site reliab
 
 This project starts as a design-first exploration before becoming a full portfolio site. The goal is not to build a generic resume page. The goal is to create a world: nature, travel, infrastructure, systems, reliability, and code woven into one scrolling experience.
 
+GitHub repo: `scrolling-portfolio-site`
+
+## Project Status
+
+The repo is currently in the planning and design phase.
+
+No frontend framework has been scaffolded yet. The next step is to decide the technical stack after the first scroll experience is clear.
+
+## Docs
+
+- [Initial Design Brief](./docs/initial-design-brief.md)
+- [Technical Direction](./docs/technical-direction.md)
+
 ## Working Concept
 
 **Field Notes From a Systems Traveller**
