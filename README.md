@@ -10,6 +10,7 @@ Planning and design phase. No frontend framework has been scaffolded yet.
 
 - [Initial Design Brief](./docs/initial-design-brief.md)
 - [Technical Direction](./docs/technical-direction.md)
+- [Reference Site Analysis](./docs/reference-site-analysis.md)
 
 ## Development
 
