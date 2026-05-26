@@ -5,19 +5,63 @@
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 20%, rgba(80, 220, 190, 0.12), transparent 34rem),
+    linear-gradient(rgba(130, 247, 181, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(130, 247, 181, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 45%, rgba(80, 220, 190, 0.18), transparent 22rem),
+    radial-gradient(circle at 70% 65%, rgba(100, 217, 255, 0.1), transparent 28rem),
     var(--color-night);
+  background-size: 76px 76px, 76px 76px, auto, auto, auto;
   color: var(--color-glacier);
 }
 
+.boot-corner {
+  position: absolute;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-color: rgba(130, 247, 181, 0.72);
+  border-style: solid;
+  filter: drop-shadow(0 0 0.65rem rgba(130, 247, 181, 0.28));
+}
+
+.boot-corner-tl {
+  top: 1.4rem;
+  left: 1.4rem;
+  border-width: 1px 0 0 1px;
+}
+
+.boot-corner-tr {
+  top: 1.4rem;
+  right: 1.4rem;
+  border-width: 1px 1px 0 0;
+}
+
+.boot-corner-bl {
+  bottom: 1.4rem;
+  left: 1.4rem;
+  border-width: 0 0 1px 1px;
+}
+
+.boot-corner-br {
+  right: 1.4rem;
+  bottom: 1.4rem;
+  border-width: 0 1px 1px 0;
+}
+
 .boot-panel {
-  width: min(36rem, calc(100vw - 2rem));
-  border: 1px solid rgba(218, 232, 226, 0.16);
-  background: rgba(8, 13, 15, 0.78);
-  padding: 1rem;
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.8fr) minmax(16rem, 1fr);
+  gap: clamp(1.25rem, 4vw, 3rem);
+  width: min(54rem, calc(100vw - 2rem));
+  border: 1px solid rgba(218, 232, 226, 0.14);
+  background:
+    linear-gradient(135deg, rgba(130, 247, 181, 0.08), transparent 42%),
+    rgba(8, 13, 15, 0.78);
+  padding: clamp(1rem, 3vw, 1.4rem);
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.34);
 }
 
 .boot-header {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: space-between;
   color: var(--color-signal);
@@ -27,19 +71,91 @@
   text-transform: uppercase;
 }
 
+.boot-core {
+  position: relative;
+  display: grid;
+  min-height: 16rem;
+  place-items: center;
+  border: 1px solid rgba(238, 246, 242, 0.08);
+  background: rgba(5, 8, 9, 0.35);
+  overflow: hidden;
+}
+
+.boot-core::before {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-radial-gradient(circle, transparent 0 22px, rgba(130, 247, 181, 0.08) 23px 24px),
+    conic-gradient(from 120deg, transparent, rgba(100, 217, 255, 0.25), transparent 40%);
+  content: "";
+  opacity: 0.8;
+  animation: boot-scan 8s linear infinite;
+}
+
+.boot-core-ring,
+.boot-core-dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.boot-core-ring {
+  border: 1px solid rgba(130, 247, 181, 0.34);
+}
+
+.boot-core-ring-a {
+  width: 58%;
+  height: 58%;
+}
+
+.boot-core-ring-b {
+  width: 34%;
+  height: 34%;
+  border-style: dashed;
+  border-color: rgba(100, 217, 255, 0.46);
+  animation: boot-drift 11s linear infinite;
+}
+
+.boot-core-dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  background: var(--color-signal);
+  box-shadow: 0 0 2.4rem rgba(130, 247, 181, 0.82);
+}
+
 .boot-lines {
-  min-height: 11rem;
-  padding: 2rem 0;
+  min-height: 12rem;
+  padding: 1.2rem 0 0;
 }
 
 .boot-lines p {
-  margin: 0.45rem 0;
+  margin: 0 0 0.55rem;
   color: rgba(238, 246, 242, 0.84);
   font-family: var(--font-mono);
   font-size: clamp(0.8rem, 2vw, 1rem);
 }
 
+.boot-lines p:first-child {
+  color: var(--color-glacier);
+}
+
+.boot-diagnostics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-self: end;
+}
+
+.boot-diagnostics span {
+  border: 1px solid rgba(238, 246, 242, 0.1);
+  padding: 0.34rem 0.5rem;
+  color: rgba(238, 246, 242, 0.56);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+}
+
 .boot-progress {
+  grid-column: 1 / -1;
   height: 0.125rem;
   overflow: hidden;
   background: rgba(238, 246, 242, 0.14);
@@ -50,4 +166,34 @@
   height: 100%;
   background: linear-gradient(90deg, var(--color-signal), var(--color-aurora));
   transition: width 280ms ease;
+}
+
+@keyframes boot-scan {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes boot-drift {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .boot-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .boot-core {
+    min-height: 12rem;
+  }
 }

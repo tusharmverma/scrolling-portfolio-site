@@ -25,6 +25,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const [bootComplete, setBootComplete] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>(sections[0].id);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionMarkers = useMemo(
     () => sections.map(({ id, label }) => ({ id, label })),
     [],
@@ -61,6 +63,50 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const updateProgress = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(maxScroll > 0 ? window.scrollY / maxScroll : 0);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visibleEntries[0]?.target.id) {
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-35% 0px -45% 0px",
+        threshold: [0.1, 0.25, 0.5, 0.75],
+      },
+    );
+
+    sections.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!bootComplete) {
+      return;
+    }
+
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -71,20 +117,70 @@ function App() {
 
     const context = gsap.context(() => {
       gsap.fromTo(
-        ".scene-section:not(.hero-section) .scene-inner",
-        { autoAlpha: 0, y: 64 },
+        ".hero-copy > *, .system-orbit",
+        { autoAlpha: 0, y: 30 },
         {
           autoAlpha: 1,
           y: 0,
-          duration: 1.15,
+          duration: 1.1,
           ease: "power3.out",
           stagger: 0.08,
-          scrollTrigger: {
-            trigger: ".scene-section:not(.hero-section)",
-            start: "top 72%",
-          },
         },
       );
+
+      gsap.to(".route-trace", {
+        yPercent: 16,
+        rotate: 18,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".site-shell",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+        },
+      });
+
+      gsap.utils
+        .toArray<HTMLElement>(".scene-section:not(.hero-section)")
+        .forEach((section) => {
+          const inner = section.querySelector(".scene-inner");
+          const stagedChildren = section.querySelectorAll(
+            ".signal-grid article, .terrain-zone, .expedition-card, .storm-protocol span, .contact-links a",
+          );
+
+          gsap.fromTo(
+            inner,
+            { autoAlpha: 0, y: 64 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 1.15,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 70%",
+              },
+            },
+          );
+
+          if (stagedChildren.length > 0) {
+            gsap.fromTo(
+              stagedChildren,
+              { autoAlpha: 0, y: 28 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                stagger: 0.08,
+                scrollTrigger: {
+                  trigger: section,
+                  start: "top 56%",
+                },
+              },
+            );
+          }
+        });
 
       gsap.utils.toArray<HTMLElement>(".scene-section").forEach((section) => {
         gsap.fromTo(
@@ -104,7 +200,7 @@ function App() {
     });
 
     return () => context.revert();
-  }, []);
+  }, [bootComplete]);
 
   return (
     <>
@@ -112,10 +208,15 @@ function App() {
         <BootSequence lines={bootLines} onComplete={() => setBootComplete(true)} />
       )}
 
-      <RouteProgress sections={sectionMarkers} />
+      <RouteProgress
+        sections={sectionMarkers}
+        activeSection={activeSection}
+        progress={scrollProgress}
+      />
 
       <div className="atmosphere-layer" aria-hidden="true">
         <span className="star-field" />
+        <span className="topography-field" />
         <span className="ridge-line ridge-line-back" />
         <span className="ridge-line ridge-line-front" />
         <span className="route-trace" />

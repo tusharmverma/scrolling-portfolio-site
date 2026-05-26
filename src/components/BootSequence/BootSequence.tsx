@@ -25,16 +25,35 @@ export function BootSequence({ lines, onComplete }: BootSequenceProps) {
 
   return (
     <div className="boot-sequence" role="status" aria-live="polite">
+      <span className="boot-corner boot-corner-tl" aria-hidden="true" />
+      <span className="boot-corner boot-corner-tr" aria-hidden="true" />
+      <span className="boot-corner boot-corner-bl" aria-hidden="true" />
+      <span className="boot-corner boot-corner-br" aria-hidden="true" />
+
       <div className="boot-panel">
         <div className="boot-header">
-          <span>FIELD NOTES</span>
-          <span>{progress}%</span>
+          <span>FIELD NOTES / ROUTE WAKE</span>
+          <span>BASECAMP {progress}%</span>
         </div>
+
+        <div className="boot-core" aria-hidden="true">
+          <span className="boot-core-ring boot-core-ring-a" />
+          <span className="boot-core-ring boot-core-ring-b" />
+          <span className="boot-core-dot" />
+        </div>
+
         <div className="boot-lines">
           {lines.slice(0, visibleLines).map((line) => (
             <p key={line}>{line}</p>
           ))}
         </div>
+
+        <div className="boot-diagnostics" aria-hidden="true">
+          <span>SIGNAL: STABLE</span>
+          <span>TERRAIN: RESOLVING</span>
+          <span>WEATHER: WATCH</span>
+        </div>
+
         <div className="boot-progress" aria-hidden="true">
           <span style={{ width: `${progress}%` }} />
         </div>

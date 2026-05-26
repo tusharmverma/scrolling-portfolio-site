@@ -50,6 +50,7 @@ a {
 }
 
 .star-field,
+.topography-field,
 .ridge-line,
 .route-trace {
   position: absolute;
@@ -67,6 +68,18 @@ a {
   background-position: 8% 18%, 71% 24%, 48% 74%;
   background-size: 19rem 17rem, 23rem 19rem, 29rem 27rem;
   mask-image: linear-gradient(180deg, #000, transparent 78%);
+}
+
+.topography-field {
+  inset: 8% 4% auto auto;
+  width: min(52rem, 60vw);
+  height: min(38rem, 44vw);
+  opacity: 0.32;
+  background:
+    repeating-radial-gradient(ellipse at 52% 48%, transparent 0 18px, rgba(238, 246, 242, 0.05) 19px 20px),
+    repeating-radial-gradient(ellipse at 22% 68%, transparent 0 28px, rgba(130, 247, 181, 0.06) 29px 30px);
+  filter: blur(0.2px);
+  transform: rotate(-10deg);
 }
 
 .ridge-line {
@@ -137,6 +150,16 @@ a {
   background: rgba(238, 246, 242, 0.18);
 }
 
+.route-progress-fill {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.42rem;
+  width: 1px;
+  background: linear-gradient(var(--color-signal), var(--color-aurora), var(--color-ember));
+  transform-origin: top;
+}
+
 .route-progress a {
   position: relative;
   display: grid;
@@ -148,6 +171,9 @@ a {
   font-size: 0.68rem;
   text-decoration: none;
   text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .route-progress a span {
@@ -159,6 +185,22 @@ a {
   background: var(--color-night);
   color: var(--color-signal);
   font-size: 0.52rem;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.route-progress a.is-active {
+  color: var(--color-glacier);
+  transform: translateX(-0.25rem);
+}
+
+.route-progress a.is-active span {
+  border-color: var(--color-signal);
+  background: var(--color-signal);
+  color: var(--color-night);
+  box-shadow: 0 0 1rem rgba(130, 247, 181, 0.35);
 }
 
 .scene-section {
