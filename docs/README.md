@@ -9,6 +9,7 @@ The project is intentionally starting with design, story, and structure. Once th
 - [Initial Design Brief](./initial-design-brief.md)
 - [Experience Architecture](./experience-architecture.md)
 - [Phase 1 Blueprint](./phase-1-blueprint.md)
+- [Prototyping Options](./prototyping-options.md)
 - [Technical Direction](./technical-direction.md)
 
 ## Working Rule
