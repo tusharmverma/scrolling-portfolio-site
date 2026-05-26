@@ -8,6 +8,7 @@ The project is intentionally starting with design, story, and structure. Once th
 
 - [Initial Design Brief](./initial-design-brief.md)
 - [Experience Architecture](./experience-architecture.md)
+- [3D Visual Direction](./3d-visual-direction.md)
 - [Phase 1 Blueprint](./phase-1-blueprint.md)
 - [Prototyping Options](./prototyping-options.md)
 - [Reference Site Analysis](./reference-site-analysis.md)

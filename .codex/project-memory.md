@@ -106,7 +106,27 @@ Important files:
 - `src/components/ExpeditionCard/`
 - `src/data/`
 
-The app has not yet been visually verified because the current Codex shell had Node but no package manager available.
+The app has been visually verified in early desktop/mobile passes. The current direction is a CSS/SVG/GSAP foundation before adding real 3D.
+
+## 3D Direction
+
+The 3D layer should eventually feel like a sci-fi nature field system, not a decorative object.
+
+When ready, use:
+
+- `three`
+- `@react-three/fiber`
+- `@react-three/drei`
+
+First 3D target:
+
+- One full-bleed procedural `FieldScene`.
+- Terrain surface.
+- Signal particles.
+- Route line.
+- Storm/weather pressure layer.
+
+Do not start with a heavy `.glb` model. Start procedural so the world can be tuned to the story and kept performant.
 
 ## Next Build Step
 

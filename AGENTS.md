@@ -4,6 +4,7 @@ This repo is a design-first portfolio project. Before making meaningful product 
 
 - `docs/reference-site-analysis.md`
 - `docs/experience-architecture.md`
+- `docs/3d-visual-direction.md`
 - `docs/phase-1-blueprint.md`
 - `.codex/project-memory.md`
 
@@ -36,6 +37,8 @@ Phase 1 stack:
 - Lenis
 
 Do not add Three.js or React Three Fiber until the design truly needs real 3D. Start with strong layout, CSS/SVG atmosphere, scroll pacing, and a serious boot sequence.
+
+When real 3D begins, use `three`, `@react-three/fiber`, and `@react-three/drei` for a full-bleed procedural field scene. Avoid starting with a heavy GLB model unless it clearly serves the story.
 
 ## Design Rules
 
