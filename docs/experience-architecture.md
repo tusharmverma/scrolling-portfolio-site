@@ -93,6 +93,30 @@ The layout should feel spacious and cinematic:
 - Small technical overlays instead of large dashboard cards.
 - Section labels that feel like route markers.
 
+## Journey Structure
+
+The earlier simple journey was:
+
+```text
+Boot -> Basecamp -> Terrain -> Expeditions -> Contact
+```
+
+The stronger direction is:
+
+```text
+Boot -> Basecamp -> Signal Field -> Terrain Systems -> Expeditions -> Storm Protocol -> Next Coordinates
+```
+
+This gives the portfolio a more specific identity:
+
+- **Boot**: the field system comes online.
+- **Basecamp**: identity and positioning.
+- **Signal Field**: observability, curiosity, and how Tushar reads systems.
+- **Terrain Systems**: skills mapped to natural/software terrain.
+- **Expeditions**: projects as routes and case studies.
+- **Storm Protocol**: reliability, incidents, pressure, recovery.
+- **Next Coordinates**: contact and links.
+
 ## Core Components
 
 These are the conceptual components the site will eventually need.

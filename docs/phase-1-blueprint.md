@@ -16,8 +16,10 @@ The prototype should include:
 
 - A boot/loading sequence.
 - A full-screen hero scene.
+- A signal field section.
 - A terrain/skills preview.
 - An expeditions/projects preview.
+- A storm protocol preview.
 - A contact/next coordinates ending.
 - Smooth scroll behavior.
 - Basic responsive layout.
@@ -117,7 +119,18 @@ Visual:
 - Small coordinate/status labels.
 - Scroll cue.
 
-### 3. Terrain Preview
+### 3. Signal Field
+
+Introduce the SRE way of seeing:
+
+```text
+Before I move, I read the signals.
+Logs, metrics, traces, symptoms, pressure.
+```
+
+This section makes observability part of the story instead of hiding it in a skills list.
+
+### 4. Terrain Preview
 
 Introduce the metaphor:
 
@@ -136,7 +149,7 @@ Show 4-5 skill zones:
 
 Each zone has a short line, not a paragraph.
 
-### 4. Expedition Preview
+### 5. Expedition Preview
 
 Introduce project slots before full case studies exist.
 
@@ -153,7 +166,18 @@ Show 2-3 placeholder project destinations:
 
 These can be placeholders until real projects are selected.
 
-### 5. Next Coordinates
+### 6. Storm Protocol
+
+Introduce reliability thinking:
+
+```text
+Every system has weather.
+I build for the storm.
+```
+
+Phase 1 can keep this short. Later it can become an incident/recovery timeline.
+
+### 7. Next Coordinates
 
 End with contact and future action:
 
@@ -280,7 +304,7 @@ Later:
 ## First Implementation Tasks
 
 1. Scaffold Vite + React + TypeScript.
-2. Install GSAP, `@gsap/react`, and Lenis.
+2. Install GSAP, `@gsap/react`, and `lenis`.
 3. Add global styles and design tokens.
 4. Build the static page sections.
 5. Add BootSequence.

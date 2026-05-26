@@ -13,4 +13,15 @@ Planning and design phase. No frontend framework has been scaffolded yet.
 
 ## Development
 
-Setup instructions will be added after the tech stack is selected.
+This project uses Vite, React, TypeScript, GSAP, and Lenis.
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```

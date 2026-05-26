@@ -1,6 +1,6 @@
 # Technical Direction
 
-This document is intentionally lightweight for now. The repo should not commit to an app structure until the first experience is designed clearly enough.
+This document records the phase 1 stack decision.
 
 ## Decision
 
