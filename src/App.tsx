@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { BootSequence } from "./components/BootSequence/BootSequence";
 import { RouteProgress } from "./components/RouteProgress/RouteProgress";
@@ -11,13 +13,15 @@ import { skills } from "./data/skills";
 import { expeditions } from "./data/expeditions";
 
 const bootLines = [
-  "INITIALIZING ROUTE",
-  "Mapping services...",
+  "FIELD SYSTEM / INIT",
+  "Mapping route...",
   "Checking signal...",
-  "Warming terminal...",
-  "Syncing coordinates...",
-  "Entering the field...",
+  "Reading terrain...",
+  "Syncing field notes...",
+  "Entering basecamp...",
 ];
+
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const [bootComplete, setBootComplete] = useState(false);
@@ -56,6 +60,52 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        ".scene-section:not(.hero-section) .scene-inner",
+        { autoAlpha: 0, y: 64 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1.15,
+          ease: "power3.out",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: ".scene-section:not(.hero-section)",
+            start: "top 72%",
+          },
+        },
+      );
+
+      gsap.utils.toArray<HTMLElement>(".scene-section").forEach((section) => {
+        gsap.fromTo(
+          section.querySelector(".scene-label"),
+          { autoAlpha: 0.25 },
+          {
+            autoAlpha: 0.8,
+            scrollTrigger: {
+              trigger: section,
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          },
+        );
+      });
+    });
+
+    return () => context.revert();
+  }, []);
+
   return (
     <>
       {!bootComplete && (
@@ -63,6 +113,13 @@ function App() {
       )}
 
       <RouteProgress sections={sectionMarkers} />
+
+      <div className="atmosphere-layer" aria-hidden="true">
+        <span className="star-field" />
+        <span className="ridge-line ridge-line-back" />
+        <span className="ridge-line ridge-line-front" />
+        <span className="route-trace" />
+      </div>
 
       <main className="site-shell" aria-label="Field Notes portfolio">
         <SceneSection
@@ -73,10 +130,10 @@ function App() {
         >
           <div className="hero-grid">
             <div className="hero-copy">
-              <SignalText>COORDINATES: FIELD-NOTES / 001</SignalText>
+              <SignalText>FIELD NOTES / TRAVELLER-SRE</SignalText>
               <h1>Tushar</h1>
               <p className="hero-role">
-                Software Engineer / Site Reliability Engineer
+                Traveller / Software Engineer / Site Reliability Engineer
               </p>
               <p className="hero-statement">
                 Building reliable systems from shifting terrain.
@@ -88,6 +145,8 @@ function App() {
               <span className="orbit-ring orbit-ring-small" />
               <span className="orbit-core" />
               <span className="orbit-route" />
+              <span className="orbit-label orbit-label-north">N 43.65</span>
+              <span className="orbit-label orbit-label-east">W 79.38</span>
             </div>
           </div>
         </SceneSection>

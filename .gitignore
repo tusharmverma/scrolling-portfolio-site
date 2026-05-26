@@ -9,6 +9,9 @@ build/
 .next/
 out/
 coverage/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 
 # Environment files
 .env
