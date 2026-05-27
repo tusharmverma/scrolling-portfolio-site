@@ -226,6 +226,13 @@ a {
   padding: clamp(6rem, 10vw, 8rem) var(--page-pad);
 }
 
+.hero-section,
+#signal,
+#descent,
+#terrain {
+  min-height: 118svh;
+}
+
 .scene-inner {
   position: relative;
   z-index: 4;

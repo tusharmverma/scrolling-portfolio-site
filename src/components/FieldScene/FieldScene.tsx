@@ -155,7 +155,10 @@ function AtmosphereWorld({ activeSection, progress }: FieldSceneProps) {
   const glowRef = useRef<THREE.Mesh>(null);
   const earthMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
   const glowMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const reveal = smoothstep(0.35, 0.66, progress);
+  const reveal =
+    activeSection === "descent" || activeSection === "terrain" || activeSection === "contact"
+      ? 1
+      : smoothstep(0.35, 0.66, progress);
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
@@ -210,10 +213,75 @@ function AtmosphereWorld({ activeSection, progress }: FieldSceneProps) {
   );
 }
 
+function SignalRush({ activeSection, progress }: FieldSceneProps) {
+  const pointsRef = useRef<THREE.Points>(null);
+  const materialRef = useRef<THREE.PointsMaterial>(null);
+  const rushReveal =
+    activeSection === "signal" || activeSection === "descent"
+      ? 1
+      : smoothstep(0.12, 0.5, progress) * (1 - smoothstep(0.66, 0.86, progress));
+
+  const geometry = useMemo(() => {
+    const count = 760;
+    const positions = new Float32Array(count * 3);
+
+    for (let index = 0; index < count; index += 1) {
+      const radius = 0.5 + Math.random() * 5.4;
+      const angle = Math.random() * Math.PI * 2;
+      const depth = -2.5 - Math.random() * 12;
+
+      positions[index * 3] = Math.cos(angle) * radius;
+      positions[index * 3 + 1] = Math.sin(angle) * radius * 0.64;
+      positions[index * 3 + 2] = depth;
+    }
+
+    const rush = new THREE.BufferGeometry();
+    rush.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return rush;
+  }, []);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (pointsRef.current) {
+      pointsRef.current.position.x = 1.1 - progress * 1.6;
+      pointsRef.current.position.y = -0.12 + progress * 0.28;
+      pointsRef.current.position.z = (progress * 18 + elapsed * 0.2) % 2.4;
+      pointsRef.current.rotation.z = progress * 1.2 + elapsed * 0.035;
+    }
+
+    if (materialRef.current) {
+      materialRef.current.opacity =
+        rushReveal * (activeSection === "signal" || activeSection === "descent" ? 0.95 : 0.55);
+      materialRef.current.size = 1.4 + rushReveal * 2.2;
+      materialRef.current.color.set(activeSection === "signal" ? "#64d9ff" : "#d7fff0");
+    }
+  });
+
+  return (
+    <points ref={pointsRef} geometry={geometry} position={[1.1, -0.12, 0]}>
+      <pointsMaterial
+        ref={materialRef}
+        color="#d7fff0"
+        size={1.4}
+        sizeAttenuation={false}
+        transparent
+        opacity={0}
+        depthWrite={false}
+        depthTest={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
+}
+
 function MountainHorizon({ activeSection, progress }: FieldSceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const reveal = smoothstep(0.58, 0.88, progress);
+  const reveal =
+    activeSection === "terrain" || activeSection === "contact"
+      ? 1
+      : smoothstep(0.58, 0.88, progress);
 
   const geometry = useMemo(() => {
     const vertices: number[] = [];
@@ -258,15 +326,80 @@ function MountainHorizon({ activeSection, progress }: FieldSceneProps) {
   return (
     <mesh ref={meshRef} geometry={geometry} position={[-0.65, -0.05, 0]}>
       <meshBasicMaterial
-        ref={materialRef}
-        color="#82f7b5"
-        transparent
-        opacity={0}
-        wireframe
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
+      ref={materialRef}
+      color="#82f7b5"
+      transparent
+      opacity={0}
+      wireframe
+      depthWrite={false}
+      depthTest={false}
+      blending={THREE.AdditiveBlending}
+    />
     </mesh>
+  );
+}
+
+function PeakSpire({ activeSection, progress }: FieldSceneProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const coreMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const wireMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const reveal =
+    activeSection === "terrain" || activeSection === "contact"
+      ? 1
+      : smoothstep(0.62, 0.9, progress);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (groupRef.current) {
+      groupRef.current.position.x = 1.75 - progress * 0.32;
+      groupRef.current.position.y = 0.02 + reveal * 0.18 + Math.sin(elapsed * 0.35) * 0.025;
+      groupRef.current.rotation.y = Math.PI * 0.25 + progress * 0.45;
+      groupRef.current.rotation.z = -0.05 + Math.sin(elapsed * 0.25) * 0.015;
+    }
+
+    if (coreMaterialRef.current) {
+      coreMaterialRef.current.opacity = Math.max(
+        0.12,
+        reveal * (activeSection === "terrain" ? 0.32 : 0.18),
+      );
+    }
+
+    if (wireMaterialRef.current) {
+      wireMaterialRef.current.opacity = Math.max(
+        0.48,
+        reveal * (activeSection === "terrain" ? 1 : 0.62),
+      );
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[1.75, 0.02, -4.2]} rotation={[0.02, Math.PI * 0.25, -0.05]}>
+      <mesh>
+        <coneGeometry args={[1.18, 3.35, 5, 1]} />
+        <meshBasicMaterial
+          ref={coreMaterialRef}
+          color="#123c35"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          depthTest={false}
+        />
+      </mesh>
+      <mesh>
+        <coneGeometry args={[1.2, 3.38, 5, 1]} />
+        <meshBasicMaterial
+          ref={wireMaterialRef}
+          color="#82f7b5"
+          wireframe
+          transparent
+          opacity={0}
+          depthWrite={false}
+          depthTest={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -834,8 +967,10 @@ function SceneContents(props: FieldSceneProps) {
       <fog attach="fog" args={["#050809", 7, 18]} />
       <CameraRig {...props} />
       <PortalTunnel {...props} />
+      <SignalRush {...props} />
       <AtmosphereWorld {...props} />
       <MountainHorizon {...props} />
+      <PeakSpire {...props} />
       <ScanRings {...props} />
       <TerrainSurface {...props} />
       <SignalParticles {...props} />
