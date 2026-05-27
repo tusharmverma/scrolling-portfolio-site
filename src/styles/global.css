@@ -8,6 +8,12 @@ html {
   scroll-behavior: auto;
 }
 
+#root {
+  position: relative;
+  isolation: isolate;
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -28,7 +34,9 @@ a {
 
 .site-shell {
   position: relative;
+  z-index: 10;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .atmosphere-layer,
@@ -36,17 +44,23 @@ a {
 .site-shell::after {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
   content: "";
   pointer-events: none;
 }
 
 .atmosphere-layer {
+  z-index: 1;
   overflow: hidden;
   background:
-    radial-gradient(circle at 76% 52%, rgba(100, 217, 255, 0.13), transparent 18rem),
-    radial-gradient(circle at 22% 38%, rgba(130, 247, 181, 0.08), transparent 20rem),
+    radial-gradient(circle at 76% 52%, rgba(100, 217, 255, 0.1), transparent 18rem),
+    radial-gradient(circle at 22% 38%, rgba(130, 247, 181, 0.06), transparent 20rem),
     linear-gradient(180deg, transparent 55%, rgba(5, 8, 9, 0.82));
+}
+
+.site-shell::before,
+.site-shell::after {
+  z-index: -1;
 }
 
 .star-field,
@@ -135,7 +149,7 @@ a {
   position: fixed;
   top: 50%;
   right: 1rem;
-  z-index: 20;
+  z-index: 30;
   display: grid;
   gap: 0.9rem;
   transform: translateY(-50%);
@@ -205,18 +219,22 @@ a {
 
 .scene-section {
   position: relative;
+  z-index: 3;
   display: grid;
   min-height: 100svh;
   padding: clamp(6rem, 10vw, 8rem) var(--page-pad);
 }
 
 .scene-inner {
+  position: relative;
+  z-index: 4;
   width: min(var(--max-width), 100%);
   margin: auto;
 }
 
 .scene-label {
   position: absolute;
+  z-index: 4;
   top: 1.2rem;
   left: var(--page-pad);
   color: rgba(238, 246, 242, 0.45);
@@ -279,6 +297,7 @@ p {
 
 .hero-copy {
   position: relative;
+  z-index: 5;
 }
 
 .hero-copy::before {
@@ -308,6 +327,7 @@ p {
 
 .system-orbit {
   position: relative;
+  z-index: 4;
   aspect-ratio: 1;
   min-height: 18rem;
   border-radius: 50%;

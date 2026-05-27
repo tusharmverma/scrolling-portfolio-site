@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -23,6 +23,12 @@ const bootLines = [
 
 gsap.registerPlugin(ScrollTrigger);
 
+const FieldScene = lazy(() =>
+  import("./components/FieldScene/FieldScene").then((module) => ({
+    default: module.FieldScene,
+  })),
+);
+
 function App() {
   const [bootComplete, setBootComplete] = useState(false);
   const [activeSection, setActiveSection] = useState<string>(sections[0].id);
@@ -46,6 +52,8 @@ function App() {
       lerp: 0.08,
       smoothWheel: true,
     });
+
+    lenis.on("scroll", ScrollTrigger.update);
 
     let frame = 0;
 
@@ -118,9 +126,8 @@ function App() {
     const context = gsap.context(() => {
       gsap.fromTo(
         ".hero-copy > *, .system-orbit",
-        { autoAlpha: 0, y: 30 },
+        { y: 30 },
         {
-          autoAlpha: 1,
           y: 0,
           duration: 1.1,
           ease: "power3.out",
@@ -150,9 +157,8 @@ function App() {
 
           gsap.fromTo(
             inner,
-            { autoAlpha: 0, y: 64 },
+            { y: 64 },
             {
-              autoAlpha: 1,
               y: 0,
               duration: 1.15,
               ease: "power3.out",
@@ -166,9 +172,8 @@ function App() {
           if (stagedChildren.length > 0) {
             gsap.fromTo(
               stagedChildren,
-              { autoAlpha: 0, y: 28 },
+              { y: 28 },
               {
-                autoAlpha: 1,
                 y: 0,
                 duration: 0.8,
                 ease: "power3.out",
@@ -213,6 +218,10 @@ function App() {
         activeSection={activeSection}
         progress={scrollProgress}
       />
+
+      <Suspense fallback={null}>
+        <FieldScene activeSection={activeSection} progress={scrollProgress} />
+      </Suspense>
 
       <div className="atmosphere-layer" aria-hidden="true">
         <span className="star-field" />

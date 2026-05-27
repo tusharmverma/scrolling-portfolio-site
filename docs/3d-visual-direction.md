@@ -45,18 +45,20 @@ This fits the current stack:
 - GSAP ScrollTrigger
 - Lenis
 
-## Why Not Add 3D Too Early
+## Why Add 3D Now
 
-The page must first work as a strong cinematic scroll experience.
+The page now has enough structure to support one focused 3D layer.
 
-Adding 3D too early can create:
+The goal is still not to make a heavy 3D website. The goal is to add one living field system behind the scroll journey so the portfolio starts to feel like a technical expedition through nature.
+
+3D can create problems if it is added without restraint:
 
 - Slow first load.
 - Harder mobile performance.
 - Unclear visual direction.
 - 3D that feels decorative instead of meaningful.
 
-The right approach is to introduce one focused 3D scene, not a whole 3D website at once.
+The right approach is one full-page background scene that is lazy-loaded and tuned behind the content.
 
 ## First 3D Concept
 
@@ -153,6 +155,7 @@ Avoid over-binding every small 3D property directly to React state. For animatio
 - Respect `prefers-reduced-motion`.
 - Provide a non-3D fallback atmosphere.
 - Test mobile early.
+- Keep the main text layer crisp. 3D should sit behind the story, not compete with it.
 
 ## Visual Rules
 
@@ -173,28 +176,21 @@ Avoid over-binding every small 3D property directly to React state. For animatio
 
 ## Phased 3D Plan
 
-### Phase 1.5: 3D Readiness
-
-- Keep current CSS/SVG atmosphere.
-- Define a `visual/` or `scene/` component boundary.
-- Ensure route/scroll state is clean.
-- Do not add 3D dependencies yet unless implementation begins.
-
-### Phase 2: First Canvas
+### Phase 1.5: First Field Scene
 
 - Add `three`, `@react-three/fiber`, and `@react-three/drei`.
-- Create one full-bleed `FieldScene`.
-- Render a simple procedural terrain and particles.
-- Connect camera/scene state to scroll section.
+- Create one lazy-loaded full-bleed `FieldScene`.
+- Render procedural terrain, signal particles, a route line, and a storm halo.
+- Keep the scene transparent and atmospheric so the interface remains readable.
 
-### Phase 3: Scroll-Controlled World
+### Phase 2: Scroll-Controlled World
 
 - Terrain resolves through scroll.
 - Signal particles activate in Signal Field.
 - Route line draws through Terrain/Expeditions.
 - Storm layer appears in Storm Protocol.
 
-### Phase 4: Polish
+### Phase 3: Polish
 
 - Optimize mobile.
 - Add reduced-motion fallback.
@@ -203,6 +199,6 @@ Avoid over-binding every small 3D property directly to React state. For animatio
 
 ## Current Decision
 
-Do not start with a heavy 3D model.
+Use a procedural sci-fi terrain/signal field instead of a heavy 3D model. This is more flexible, more personal, and more aligned with the portfolio story.
 
-Start with a procedural sci-fi terrain/signal field. This is more flexible, more personal, and more aligned with the portfolio story.
+Implemented first: lazy-loaded `FieldScene` with transparent canvas, terrain wireframe, signal particles, route trace, and storm halo.

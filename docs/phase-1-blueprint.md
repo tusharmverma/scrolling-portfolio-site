@@ -33,14 +33,16 @@ Use:
 - TypeScript
 - CSS modules or plain CSS files
 - GSAP
-- `@gsap/react`
 - Lenis
+- Three.js
+- React Three Fiber
+- Drei
 
-Do not start with Three.js unless phase 1 visuals prove they need it.
+Three.js is now part of Phase 1 as a single lazy-loaded background scene. Keep it procedural and restrained until the story and scroll choreography are stronger.
 
 ## Why This Stack
 
-Vite keeps the project lightweight and fast. React gives us a component model for scenes, labels, route markers, and future project sections. TypeScript keeps the codebase cleaner as the site grows. GSAP ScrollTrigger is the right tool for scroll-linked animation. Lenis gives the smooth, cinematic scroll feel.
+Vite keeps the project lightweight and fast. React gives us a component model for scenes, labels, route markers, and future project sections. TypeScript keeps the codebase cleaner as the site grows. GSAP ScrollTrigger is the right tool for scroll-linked animation. Lenis gives the smooth, cinematic scroll feel. Three.js and React Three Fiber provide the living field layer behind the content.
 
 Next.js is still a good option later if the portfolio grows into many case-study pages, but for the first version this should be a highly crafted single-page experience.
 
@@ -58,6 +60,7 @@ src/
     expeditions.ts
   components/
     BootSequence/
+    FieldScene/
     RouteProgress/
     SignalText/
     SceneSection/
