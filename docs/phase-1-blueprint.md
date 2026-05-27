@@ -56,21 +56,12 @@ src/
   main.tsx
   data/
     sections.ts
-    skills.ts
-    expeditions.ts
   components/
     BootSequence/
     FieldScene/
     RouteProgress/
     SignalText/
     SceneSection/
-    TerrainMap/
-    ExpeditionCard/
-  sections/
-    HeroSection/
-    TerrainSection/
-    ExpeditionsSection/
-    ContactSection/
   styles/
     tokens.css
     global.css
@@ -133,54 +124,36 @@ Logs, metrics, traces, symptoms, pressure.
 
 This section makes observability part of the story instead of hiding it in a skills list.
 
-### 4. Terrain Preview
+### 4. Descent
 
-Introduce the metaphor:
-
-```text
-Every system has terrain.
-I map the moving parts before I build.
-```
-
-Show 4-5 skill zones:
-
-- Backend
-- Infrastructure
-- Observability
-- Reliability
-- Automation
-
-Each zone has a short line, not a paragraph.
-
-### 5. Expedition Preview
-
-Introduce project slots before full case studies exist.
+Make the transition explicit:
 
 ```text
-Expeditions become case studies.
-Each route records the problem, constraints, decisions, and outcome.
+The map stops being flat.
+The terminal layer falls away.
 ```
 
-Show 2-3 placeholder project destinations:
+The point of this section is motion, not content. The camera should feel like it is moving from a technical field into a physical landscape.
 
-- Reliability system
-- Automation tool
-- Full-stack product
+### 5. Living Terrain
 
-These can be placeholders until real projects are selected.
-
-### 6. Storm Protocol
-
-Introduce reliability thinking:
+Introduce the eventual project world without adding heavy portfolio cards yet:
 
 ```text
-Every system has weather.
-I build for the storm.
+A system becomes a place.
 ```
 
-Phase 1 can keep this short. Later it can become an incident/recovery timeline.
+Use only a few compact markers:
 
-### 7. Next Coordinates
+```text
+ridgelines / infrastructure
+stars / observability
+weather / reliability
+```
+
+Later, real projects can return here as locations in the terrain.
+
+### 6. Next Coordinates
 
 End with contact and future action:
 

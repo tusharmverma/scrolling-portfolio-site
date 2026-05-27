@@ -71,8 +71,9 @@ Visual behavior:
 - Starts as a dark radar/signal field.
 - Terrain contour rises subtly during Basecamp.
 - Signal points appear during Signal Field.
-- Route line draws across the surface during Terrain Systems.
-- Pressure/weather distortion appears during Storm Protocol.
+- Descent zooms the camera through the technical field.
+- Route lines and terrain become more physical during Living Terrain.
+- Organic/nature traces appear only after the interface starts turning into a place.
 
 This scene can live behind the page as a full-bleed canvas, not inside a card.
 
@@ -89,7 +90,8 @@ Responsible for:
 - Terrain plane.
 - Signal particles.
 - Route line.
-- Storm/weather distortion.
+- Scan rings.
+- Nature/route growth.
 
 ### TerrainSurface
 
@@ -119,17 +121,17 @@ The visual route through the system.
 Behavior:
 
 - Draws with scroll.
-- Connects Basecamp, Signal, Terrain, Expeditions, Storm, Contact.
+- Connects Basecamp, Signal, Descent, Living Terrain, and Next Coordinates.
 
-### StormLayer
+### NatureGrowth
 
-Reliability pressure visual.
+The organic layer that starts to make the technical field feel like nature.
 
 Behavior:
 
-- Appears in Storm Protocol.
-- Can use noise, particles, color shift, or subtle distortion.
-- Must not become chaotic or unreadable.
+- Appears during Descent and Living Terrain.
+- Uses route/vine lines and soft particles.
+- Should feel like software signals becoming ridgelines, rivers, stars, and weather.
 
 ## Scroll Integration
 
@@ -137,9 +139,8 @@ Use GSAP ScrollTrigger to drive high-level scene states:
 
 - Basecamp: camera settles.
 - Signal Field: particles activate.
-- Terrain Systems: terrain and route become clear.
-- Expeditions: route markers expand.
-- Storm Protocol: pressure/weather effect rises.
+- Descent: camera moves inward and the grid starts feeling physical.
+- Living Terrain: terrain and nature traces become clear.
 - Next Coordinates: scene calms.
 
 Use React state or refs to pass scroll state into the 3D scene.
@@ -187,8 +188,8 @@ Avoid over-binding every small 3D property directly to React state. For animatio
 
 - Terrain resolves through scroll.
 - Signal particles activate in Signal Field.
-- Route line draws through Terrain/Expeditions.
-- Storm layer appears in Storm Protocol.
+- Camera zooms during Descent.
+- Nature/route growth appears in Living Terrain.
 
 ### Phase 3: Polish
 

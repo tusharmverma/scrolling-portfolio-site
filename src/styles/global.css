@@ -402,6 +402,42 @@ p {
   font-size: clamp(1.15rem, 2vw, 1.55rem);
 }
 
+.field-note-stack {
+  display: grid;
+  width: min(52rem, 100%);
+  gap: 1px;
+  border: 1px solid rgba(238, 246, 242, 0.12);
+  background: rgba(238, 246, 242, 0.08);
+}
+
+.field-note {
+  margin: 0;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  background:
+    linear-gradient(120deg, rgba(100, 217, 255, 0.08), transparent 48%),
+    rgba(5, 8, 9, 0.5);
+  color: rgba(238, 246, 242, 0.86);
+  backdrop-filter: blur(4px);
+}
+
+.nature-marker-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  width: min(54rem, 100%);
+}
+
+.nature-marker {
+  border: 1px solid rgba(130, 247, 181, 0.28);
+  background: rgba(5, 8, 9, 0.42);
+  padding: 0.75rem 0.85rem;
+  color: rgba(215, 255, 240, 0.82);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
 .signal-grid,
 .terrain-map {
   position: relative;
@@ -417,7 +453,7 @@ p {
 }
 
 .signal-grid article {
-  min-height: 18rem;
+  min-height: clamp(9rem, 18vh, 13rem);
   padding: 1.2rem;
   background:
     linear-gradient(180deg, rgba(130, 247, 181, 0.09), transparent),
@@ -561,7 +597,6 @@ p {
   }
 
   .hero-grid,
-  .signal-grid,
   .terrain-map,
   .expedition-grid,
   .storm-protocol {
@@ -607,6 +642,10 @@ p {
   .system-orbit {
     min-height: 20rem;
     margin-top: 1rem;
+  }
+
+  .signal-grid {
+    grid-template-columns: 1fr;
   }
 }
 

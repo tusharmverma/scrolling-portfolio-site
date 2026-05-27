@@ -6,11 +6,7 @@ import { BootSequence } from "./components/BootSequence/BootSequence";
 import { RouteProgress } from "./components/RouteProgress/RouteProgress";
 import { SignalText } from "./components/SignalText/SignalText";
 import { SceneSection } from "./components/SceneSection/SceneSection";
-import { TerrainMap } from "./components/TerrainMap/TerrainMap";
-import { ExpeditionCard } from "./components/ExpeditionCard/ExpeditionCard";
 import { sections } from "./data/sections";
-import { skills } from "./data/skills";
-import { expeditions } from "./data/expeditions";
 
 const bootLines = [
   "FIELD SYSTEM / INIT",
@@ -152,7 +148,7 @@ function App() {
         .forEach((section) => {
           const inner = section.querySelector(".scene-inner");
           const stagedChildren = section.querySelectorAll(
-            ".signal-grid article, .terrain-zone, .expedition-card, .storm-protocol span, .contact-links a",
+            ".signal-grid article, .field-note, .nature-marker, .contact-links a",
           );
 
           gsap.fromTo(
@@ -268,86 +264,73 @@ function App() {
           title="Before I move, I read the signals."
         >
           <p className="section-lede">
-            Logs, metrics, traces, symptoms, pressure. The first job is to
-            understand what the landscape is trying to say.
+            Logs, traces, symptoms, pressure. The interface starts as a grid,
+            then the signal begins to behave like weather.
           </p>
           <div className="signal-grid">
             <article>
               <span>01</span>
               <h3>Detect</h3>
-              <p>Find the signal inside noise before the system drifts.</p>
+              <p>Find the motion inside the noise.</p>
             </article>
             <article>
               <span>02</span>
-              <h3>Diagnose</h3>
-              <p>Trace the route from symptom to cause with calm precision.</p>
+              <h3>Trace</h3>
+              <p>Follow the route until the system reveals its shape.</p>
             </article>
             <article>
               <span>03</span>
-              <h3>Recover</h3>
-              <p>Restore the path, then leave the system easier to read.</p>
+              <h3>Descend</h3>
+              <p>Move from telemetry into terrain.</p>
             </article>
+          </div>
+        </SceneSection>
+
+        <SceneSection
+          id="descent"
+          label="Route 03 / Descent"
+          eyebrow="FIELD: TRANSLATING"
+          title="The map stops being flat."
+        >
+          <div className="field-note-stack">
+            <p className="field-note">
+              The terminal layer falls away. Signals stretch into ridgelines,
+              routes become rivers, and reliability starts to feel physical.
+            </p>
+            <p className="field-note">
+              This is the world of the portfolio: software practice translated
+              into a living landscape.
+            </p>
           </div>
         </SceneSection>
 
         <SceneSection
           id="terrain"
-          label="Route 03 / Terrain Systems"
-          eyebrow="MAP: SYSTEM TOPOLOGY"
-          title="Every system has terrain."
+          label="Route 04 / Living Terrain"
+          eyebrow="NATURE: RESOLVING"
+          title="A system becomes a place."
         >
           <p className="section-lede">
-            I map the moving parts before I build: services, failure modes,
-            signals, flows, and the routes teams use to recover.
+            Later, this section can hold projects. For now it is here to prove
+            the cinematic transition: tech grid, signal field, then nature.
           </p>
-          <TerrainMap skills={skills} />
-        </SceneSection>
-
-        <SceneSection
-          id="expeditions"
-          label="Route 04 / Expeditions"
-          eyebrow="FIELD LOG: PROJECTS"
-          title="Projects become expeditions."
-        >
-          <p className="section-lede">
-            Each route will record the problem, constraints, decisions, and
-            outcome. For now, these are the first destinations in the map.
-          </p>
-          <div className="expedition-grid">
-            {expeditions.map((expedition) => (
-              <ExpeditionCard key={expedition.name} expedition={expedition} />
-            ))}
-          </div>
-        </SceneSection>
-
-        <SceneSection
-          id="storm"
-          label="Route 05 / Storm Protocol"
-          eyebrow="RELIABILITY: PRESSURE TEST"
-          title="Every system has weather."
-          className="storm-section"
-        >
-          <p className="section-lede">
-            I build for the storm: visible failure modes, repeatable recovery,
-            calmer deploys, and systems that tell the truth when pressure rises.
-          </p>
-          <div className="storm-protocol">
-            <span>Observe</span>
-            <span>Stabilize</span>
-            <span>Learn</span>
+          <div className="nature-marker-grid">
+            <span className="nature-marker">ridgelines / infrastructure</span>
+            <span className="nature-marker">stars / observability</span>
+            <span className="nature-marker">weather / reliability</span>
           </div>
         </SceneSection>
 
         <SceneSection
           id="contact"
-          label="Route 06 / Next Coordinates"
+          label="Route 05 / Next Coordinates"
           eyebrow="STATUS: READY"
           title="Next coordinates."
           className="contact-section"
         >
           <p className="section-lede">
-            The first route is open. The next phase turns these markers into
-            finished case studies, live project links, and a sharper visual world.
+            Once the motion language is strong, we can bring the real portfolio
+            content back in carefully instead of filling the world too early.
           </p>
           <div className="contact-links" aria-label="Contact links">
             <a href="https://github.com/tusharmverma">GitHub</a>

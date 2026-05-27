@@ -11,18 +11,16 @@ type FieldSceneProps = {
 const sectionIntensity: Record<string, number> = {
   basecamp: 0.2,
   signal: 0.82,
+  descent: 1,
   terrain: 0.95,
-  expeditions: 1,
-  storm: 1,
   contact: 0.7,
 };
 
 const sectionAccent: Record<string, string> = {
   basecamp: "#82f7b5",
   signal: "#64d9ff",
+  descent: "#d7fff0",
   terrain: "#82f7b5",
-  expeditions: "#d7fff0",
-  storm: "#ffb15c",
   contact: "#64d9ff",
 };
 
@@ -31,9 +29,34 @@ function CameraRig({ activeSection, progress }: FieldSceneProps) {
 
   useFrame(() => {
     const sectionShift = {
-      x: activeSection === "storm" ? 0.2 : activeSection === "contact" ? -0.35 : 0.75,
-      y: activeSection === "terrain" ? 1.15 : activeSection === "storm" ? 2.05 : 1.55,
-      z: activeSection === "terrain" || activeSection === "expeditions" ? 6.55 : 7.8,
+      x:
+        activeSection === "basecamp"
+          ? 0.85
+          : activeSection === "signal"
+            ? 0.55
+            : activeSection === "descent"
+              ? 0.08
+              : activeSection === "terrain"
+                ? -0.45
+                : -0.2,
+      y:
+        activeSection === "descent"
+          ? 1.08
+          : activeSection === "terrain"
+            ? 0.72
+            : activeSection === "contact"
+              ? 1.4
+              : 1.55,
+      z:
+        activeSection === "basecamp"
+          ? 7.9
+          : activeSection === "signal"
+            ? 6.85
+            : activeSection === "descent"
+              ? 5.15
+              : activeSection === "terrain"
+                ? 4.35
+                : 5.8,
     };
 
     camera.position.lerp(
@@ -44,7 +67,7 @@ function CameraRig({ activeSection, progress }: FieldSceneProps) {
       ),
       0.035,
     );
-    camera.lookAt(1.7 - progress * 0.8, -0.25, -4.8);
+    camera.lookAt(1.35 - progress * 1.3, -0.55 - progress * 0.4, -5.1);
   });
 
   return null;
@@ -79,18 +102,19 @@ function TerrainSurface({ activeSection, progress }: FieldSceneProps) {
     const elapsed = clock.getElapsedTime();
 
     if (meshRef.current) {
-      meshRef.current.rotation.x = -1.2 + progress * 0.22;
-      meshRef.current.rotation.z = -0.32 + progress * 0.44;
-      meshRef.current.position.x = 4.1 - progress * 1.35;
-      meshRef.current.position.y = -3.45 + progress * 1.25;
-      meshRef.current.position.z = -6.2 + intensity * 0.7;
+      const terrainStage = activeSection === "terrain" || activeSection === "contact";
+      meshRef.current.rotation.x = -1.2 + progress * 0.3;
+      meshRef.current.rotation.z = -0.32 + progress * 0.56;
+      meshRef.current.position.x = (terrainStage ? 2.2 : 4.1) - progress * 1.7;
+      meshRef.current.position.y = (terrainStage ? -2.75 : -3.45) + progress * 1.35;
+      meshRef.current.position.z = -6.2 + intensity * 0.95;
     }
 
     if (materialRef.current) {
-      const sectionBoost = activeSection === "terrain" ? 0.13 : 0;
+      const sectionBoost = activeSection === "terrain" ? 0.22 : activeSection === "descent" ? 0.12 : 0;
       materialRef.current.opacity =
-        0.06 + intensity * 0.2 + sectionBoost + Math.sin(elapsed * 0.7) * 0.018;
-      materialRef.current.color.set(activeSection === "storm" ? "#ffb15c" : "#82f7b5");
+        0.06 + intensity * 0.23 + sectionBoost + Math.sin(elapsed * 0.7) * 0.018;
+      materialRef.current.color.set(activeSection === "signal" ? "#64d9ff" : "#82f7b5");
     }
   });
 
@@ -157,7 +181,7 @@ function SignalParticles({ activeSection, progress }: FieldSceneProps) {
       materialRef.current.opacity =
         0.14 + intensity * 0.38 + (isSignal ? 0.18 : 0) + scrollEnergy * 0.28;
       materialRef.current.size =
-        (isSignal ? 0.07 : activeSection === "storm" ? 0.058 : 0.038) + scrollEnergy * 0.045;
+        (isSignal ? 0.07 : activeSection === "descent" ? 0.064 : 0.038) + scrollEnergy * 0.045;
       materialRef.current.color.set(sectionAccent[activeSection] ?? "#64d9ff");
     }
   });
@@ -215,7 +239,7 @@ function ScrollSparks({ activeSection, progress }: FieldSceneProps) {
     if (materialRef.current) {
       materialRef.current.opacity = 0.02 + energy * 0.68;
       materialRef.current.size = 0.018 + energy * 0.07;
-      materialRef.current.color.set(activeSection === "storm" ? "#ffb15c" : "#d7fff0");
+      materialRef.current.color.set(activeSection === "terrain" ? "#82f7b5" : "#d7fff0");
     }
   });
 
@@ -260,7 +284,7 @@ function RouteLine({ activeSection, progress }: FieldSceneProps) {
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
-    const lineColor = activeSection === "storm" ? "#ffb15c" : "#82f7b5";
+    const lineColor = activeSection === "signal" ? "#64d9ff" : "#82f7b5";
 
     if (meshRef.current) {
       meshRef.current.rotation.z = -0.08 + progress * 0.28;
@@ -346,15 +370,17 @@ function ScanRings({ activeSection, progress }: FieldSceneProps) {
     const elapsed = clock.getElapsedTime();
 
     if (groupRef.current) {
-      groupRef.current.position.x = 3.35 - progress * 1.1;
-      groupRef.current.position.y = -0.25 + progress * 0.42;
-      groupRef.current.rotation.z = elapsed * (activeSection === "storm" ? -0.11 : 0.045);
+      groupRef.current.position.x = 3.35 - progress * 2.2;
+      groupRef.current.position.y = -0.25 + progress * 0.72;
+      groupRef.current.position.z = -5.9 + progress * 1.2;
+      groupRef.current.rotation.z = elapsed * (activeSection === "descent" ? 0.16 : 0.045);
     }
 
     materialRefs.current.forEach((material, index) => {
       const pulse = (Math.sin(elapsed * 1.8 - index * 0.9) + 1) * 0.5;
-      material.opacity = 0.04 + intensity * 0.08 + pulse * 0.1;
-      material.color.set(activeSection === "storm" ? "#ffb15c" : index % 2 ? "#64d9ff" : "#82f7b5");
+      const terrainFade = activeSection === "terrain" || activeSection === "contact" ? 0.45 : 1;
+      material.opacity = (0.04 + intensity * 0.08 + pulse * 0.1) * terrainFade;
+      material.color.set(index % 2 ? "#64d9ff" : "#82f7b5");
     });
   });
 
@@ -381,10 +407,107 @@ function ScanRings({ activeSection, progress }: FieldSceneProps) {
   );
 }
 
+function NatureGrowth({ activeSection, progress }: FieldSceneProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const materialRefs = useRef<THREE.MeshBasicMaterial[]>([]);
+  const pointMaterialRef = useRef<THREE.PointsMaterial>(null);
+  const isNatural =
+    activeSection === "descent" ||
+    activeSection === "terrain" ||
+    activeSection === "contact";
+
+  const vineGeometries = useMemo(
+    () =>
+      [
+        [-4.2, -2.2, -5.9, -1.8, -0.6, -5.4, 1.2, -1.3, -5.7],
+        [-3.3, -3.1, -6.4, -0.9, -1.2, -5.7, 2.9, -2.2, -5.3],
+        [-1.6, -2.6, -4.9, 0.6, -0.9, -5.5, 3.6, -1.1, -6.1],
+        [-4.8, -1.4, -6.7, -2.1, 0.2, -5.9, 0.9, -0.1, -5.2],
+      ].map(([x1, y1, z1, x2, y2, z2, x3, y3, z3]) => {
+        const curve = new THREE.QuadraticBezierCurve3(
+          new THREE.Vector3(x1, y1, z1),
+          new THREE.Vector3(x2, y2, z2),
+          new THREE.Vector3(x3, y3, z3),
+        );
+        return new THREE.TubeGeometry(curve, 96, 0.011, 6, false);
+      }),
+    [],
+  );
+
+  const fireflyGeometry = useMemo(() => {
+    const count = 160;
+    const positions = new Float32Array(count * 3);
+
+    for (let index = 0; index < count; index += 1) {
+      positions[index * 3] = -4 + Math.random() * 8;
+      positions[index * 3 + 1] = -2.9 + Math.random() * 3.4;
+      positions[index * 3 + 2] = -6.4 + Math.random() * 2.8;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return geometry;
+  }, []);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+    const naturalOpacity =
+      activeSection === "terrain" ? 0.62 : activeSection === "descent" ? 0.38 : 0.22;
+
+    if (groupRef.current) {
+      groupRef.current.position.x = -0.6 - progress * 0.55;
+      groupRef.current.position.y = -0.25 + Math.sin(elapsed * 0.45) * 0.08;
+      groupRef.current.rotation.z = -0.12 + progress * 0.28;
+    }
+
+    materialRefs.current.forEach((material, index) => {
+      const wave = (Math.sin(elapsed * 1.2 + index) + 1) * 0.5;
+      material.opacity = isNatural ? naturalOpacity + wave * 0.12 : 0.02;
+    });
+
+    if (pointMaterialRef.current) {
+      pointMaterialRef.current.opacity = isNatural ? naturalOpacity * 0.72 : 0.015;
+      pointMaterialRef.current.size = activeSection === "terrain" ? 0.055 : 0.035;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[-0.6, -0.25, 0]}>
+      {vineGeometries.map((geometry, index) => (
+        <mesh key={index} geometry={geometry}>
+          <meshBasicMaterial
+            ref={(material) => {
+              if (material) {
+                materialRefs.current[index] = material;
+              }
+            }}
+            color={index % 2 ? "#64d9ff" : "#82f7b5"}
+            transparent
+            opacity={0.02}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      ))}
+      <points geometry={fireflyGeometry}>
+        <pointsMaterial
+          ref={pointMaterialRef}
+          color="#d7fff0"
+          size={0.035}
+          transparent
+          opacity={0.02}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+    </group>
+  );
+}
+
 function StormHalo({ activeSection, progress }: FieldSceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const isStorm = activeSection === "storm";
+  const isStorm = activeSection === "descent";
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
@@ -425,6 +548,7 @@ function SceneContents(props: FieldSceneProps) {
       <SignalParticles {...props} />
       <ScrollSparks {...props} />
       <RouteLine {...props} />
+      <NatureGrowth {...props} />
       <StormHalo {...props} />
     </>
   );

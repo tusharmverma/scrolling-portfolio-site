@@ -8,19 +8,15 @@ export const sections = [
     label: "Signal",
   },
   {
+    id: "descent",
+    label: "Descent",
+  },
+  {
     id: "terrain",
     label: "Terrain",
   },
   {
-    id: "expeditions",
-    label: "Expeditions",
-  },
-  {
-    id: "storm",
-    label: "Storm",
-  },
-  {
     id: "contact",
-    label: "Contact",
+    label: "Coordinates",
   },
 ] as const;

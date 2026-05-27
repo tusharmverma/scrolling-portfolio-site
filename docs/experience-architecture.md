@@ -104,17 +104,24 @@ Boot -> Basecamp -> Terrain -> Expeditions -> Contact
 The stronger direction is:
 
 ```text
-Boot -> Basecamp -> Signal Field -> Terrain Systems -> Expeditions -> Storm Protocol -> Next Coordinates
+Boot -> Basecamp -> Signal Field -> Descent -> Living Terrain -> Next Coordinates
 ```
+
+This version intentionally removes most placeholder portfolio content while the motion language is still being designed. The site should first prove the cinematic transformation:
+
+```text
+technical interface -> active signal field -> zoom/descent -> sci-fi nature terrain
+```
+
+Once that transition feels strong, project/case-study content can return as markers inside the terrain instead of conventional stacked cards.
 
 This gives the portfolio a more specific identity:
 
 - **Boot**: the field system comes online.
 - **Basecamp**: identity and positioning.
 - **Signal Field**: observability, curiosity, and how Tushar reads systems.
-- **Terrain Systems**: skills mapped to natural/software terrain.
-- **Expeditions**: projects as routes and case studies.
-- **Storm Protocol**: reliability, incidents, pressure, recovery.
+- **Descent**: the interface stops feeling flat and the visitor zooms into the world.
+- **Living Terrain**: nature/system language resolves into ridgelines, routes, stars, weather, and future project markers.
 - **Next Coordinates**: contact and links.
 
 ## Core Components
@@ -184,7 +191,7 @@ Purpose:
 Phase 1 version:
 
 - Fixed vertical or corner progress indicator.
-- Section markers: Basecamp, Terrain, Expeditions, Contact.
+- Section markers: Basecamp, Signal, Descent, Terrain, Coordinates.
 
 ### SceneSection
 
