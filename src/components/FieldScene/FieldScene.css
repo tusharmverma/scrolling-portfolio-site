@@ -3,10 +3,26 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.72;
+  opacity: 0.92;
 }
 
 .field-scene canvas {
   display: block;
   background: transparent;
+}
+
+.field-beacon {
+  color: rgba(215, 255, 240, 0.62);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0;
+  text-shadow: 0 0 0.8rem rgba(130, 247, 181, 0.45);
+  transition:
+    color 180ms ease,
+    text-shadow 180ms ease;
+}
+
+.field-beacon.is-active {
+  color: var(--color-signal);
+  text-shadow: 0 0 1.2rem rgba(130, 247, 181, 0.7);
 }

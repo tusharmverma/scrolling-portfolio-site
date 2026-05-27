@@ -53,8 +53,8 @@ a {
   z-index: 1;
   overflow: hidden;
   background:
-    radial-gradient(circle at 76% 52%, rgba(100, 217, 255, 0.1), transparent 18rem),
-    radial-gradient(circle at 22% 38%, rgba(130, 247, 181, 0.06), transparent 20rem),
+    radial-gradient(circle at 76% 52%, rgba(100, 217, 255, 0.07), transparent 18rem),
+    radial-gradient(circle at 22% 38%, rgba(130, 247, 181, 0.04), transparent 20rem),
     linear-gradient(180deg, transparent 55%, rgba(5, 8, 9, 0.82));
 }
 
@@ -88,7 +88,7 @@ a {
   inset: 8% 4% auto auto;
   width: min(52rem, 60vw);
   height: min(38rem, 44vw);
-  opacity: 0.32;
+  opacity: 0.18;
   background:
     repeating-radial-gradient(ellipse at 52% 48%, transparent 0 18px, rgba(238, 246, 242, 0.05) 19px 20px),
     repeating-radial-gradient(ellipse at 22% 68%, transparent 0 28px, rgba(130, 247, 181, 0.06) 29px 30px);
@@ -101,7 +101,7 @@ a {
   right: -6vw;
   bottom: 0;
   height: 36vh;
-  opacity: 0.48;
+  opacity: 0.3;
   clip-path: polygon(0 72%, 8% 58%, 16% 66%, 24% 44%, 31% 55%, 39% 34%, 48% 61%, 56% 42%, 66% 52%, 74% 28%, 84% 48%, 92% 39%, 100% 57%, 100% 100%, 0 100%);
 }
 
@@ -127,6 +127,7 @@ a {
     repeating-radial-gradient(circle, transparent 0 42px, rgba(130, 247, 181, 0.055) 43px 44px),
     conic-gradient(from 210deg, transparent, rgba(100, 217, 255, 0.18), transparent 34%);
   filter: blur(0.1px);
+  opacity: 0.28;
 }
 
 .site-shell::before {
@@ -325,6 +326,45 @@ p {
   line-height: 1.15;
 }
 
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.route-cta {
+  border: 1px solid rgba(130, 247, 181, 0.42);
+  background:
+    linear-gradient(90deg, rgba(130, 247, 181, 0.18), rgba(100, 217, 255, 0.08)),
+    rgba(5, 8, 9, 0.5);
+  padding: 0.78rem 0.95rem;
+  color: var(--color-glacier);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 0 0 1.4rem rgba(130, 247, 181, 0.12);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.route-cta:hover {
+  border-color: var(--color-signal);
+  box-shadow: 0 0 2rem rgba(130, 247, 181, 0.22);
+  transform: translateY(-1px);
+}
+
+.route-depth {
+  color: rgba(238, 246, 242, 0.52);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
 .system-orbit {
   position: relative;
   z-index: 4;
@@ -428,14 +468,27 @@ p {
 }
 
 .nature-marker {
+  display: inline-flex;
+  align-items: center;
   border: 1px solid rgba(130, 247, 181, 0.28);
   background: rgba(5, 8, 9, 0.42);
   padding: 0.75rem 0.85rem;
   color: rgba(215, 255, 240, 0.82);
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  text-decoration: none;
   text-transform: uppercase;
   backdrop-filter: blur(4px);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.nature-marker:hover {
+  border-color: var(--color-signal);
+  color: var(--color-glacier);
+  transform: translateY(-1px);
 }
 
 .signal-grid,

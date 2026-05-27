@@ -1,4 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Html, Text } from "@react-three/drei";
 import { memo, useMemo, useRef } from "react";
 import * as THREE from "three";
 import "./FieldScene.css";
@@ -24,53 +25,249 @@ const sectionAccent: Record<string, string> = {
   contact: "#64d9ff",
 };
 
+const routeStops = [
+  {
+    id: "basecamp",
+    label: "BASECAMP",
+    position: new THREE.Vector3(-3.2, -0.75, -4.65),
+  },
+  {
+    id: "signal",
+    label: "SIGNAL",
+    position: new THREE.Vector3(-1.25, 0.22, -4.85),
+  },
+  {
+    id: "descent",
+    label: "DESCENT",
+    position: new THREE.Vector3(0.95, -0.42, -4.55),
+  },
+  {
+    id: "terrain",
+    label: "PEAK",
+    position: new THREE.Vector3(3.15, 0.28, -4.75),
+  },
+];
+
+function clamp01(value: number) {
+  return Math.min(Math.max(value, 0), 1);
+}
+
+function smoothstep(edge0: number, edge1: number, value: number) {
+  const x = clamp01((value - edge0) / (edge1 - edge0));
+  return x * x * (3 - 2 * x);
+}
+
+function interpolateVectors(
+  start: THREE.Vector3,
+  end: THREE.Vector3,
+  amount: number,
+) {
+  return start.clone().lerp(end, amount);
+}
+
 function CameraRig({ activeSection, progress }: FieldSceneProps) {
   const { camera } = useThree();
+  const basePosition = useMemo(() => new THREE.Vector3(0.85, 1.55, 7.9), []);
+  const signalPosition = useMemo(() => new THREE.Vector3(0.35, 1.24, 5.85), []);
+  const atmospherePosition = useMemo(() => new THREE.Vector3(-0.2, 0.86, 4.45), []);
+  const terrainPosition = useMemo(() => new THREE.Vector3(-0.62, 0.54, 3.25), []);
+  const baseLookAt = useMemo(() => new THREE.Vector3(1.3, -0.55, -5.1), []);
+  const terrainLookAt = useMemo(() => new THREE.Vector3(-0.4, -1.25, -5.7), []);
 
   useFrame(() => {
-    const sectionShift = {
-      x:
-        activeSection === "basecamp"
-          ? 0.85
-          : activeSection === "signal"
-            ? 0.55
-            : activeSection === "descent"
-              ? 0.08
-              : activeSection === "terrain"
-                ? -0.45
-                : -0.2,
-      y:
-        activeSection === "descent"
-          ? 1.08
-          : activeSection === "terrain"
-            ? 0.72
-            : activeSection === "contact"
-              ? 1.4
-              : 1.55,
-      z:
-        activeSection === "basecamp"
-          ? 7.9
-          : activeSection === "signal"
-            ? 6.85
-            : activeSection === "descent"
-              ? 5.15
-              : activeSection === "terrain"
-                ? 4.35
-                : 5.8,
-    };
+    const portalFlight = smoothstep(0.05, 0.34, progress);
+    const atmosphereFlight = smoothstep(0.28, 0.58, progress);
+    const terrainFlight = smoothstep(0.5, 0.82, progress);
+    const routeDrift = Math.sin(progress * Math.PI * 1.25) * 0.12;
 
-    camera.position.lerp(
-      new THREE.Vector3(
-        sectionShift.x - progress * 0.55,
-        sectionShift.y,
-        sectionShift.z - progress * 0.35,
-      ),
-      0.035,
+    const signalStep = interpolateVectors(basePosition, signalPosition, portalFlight);
+    const atmosphereStep = interpolateVectors(
+      signalStep,
+      atmospherePosition,
+      atmosphereFlight,
     );
-    camera.lookAt(1.35 - progress * 1.3, -0.55 - progress * 0.4, -5.1);
+    const targetPosition = interpolateVectors(
+      atmosphereStep,
+      terrainPosition,
+      terrainFlight,
+    );
+
+    targetPosition.x += routeDrift;
+    targetPosition.y += Math.sin(progress * Math.PI * 2) * 0.04;
+
+    camera.position.lerp(targetPosition, 0.045);
+    camera.lookAt(interpolateVectors(baseLookAt, terrainLookAt, terrainFlight));
   });
 
   return null;
+}
+
+function PortalTunnel({ activeSection, progress }: FieldSceneProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const materialRefs = useRef<THREE.MeshBasicMaterial[]>([]);
+  const portalDepth = smoothstep(0.02, 0.38, progress);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (groupRef.current) {
+      groupRef.current.position.z = 1.8 + portalDepth * 4.6;
+      groupRef.current.rotation.z = -0.2 + progress * 1.1;
+      groupRef.current.rotation.y = Math.sin(elapsed * 0.18) * 0.08;
+    }
+
+    materialRefs.current.forEach((material, index) => {
+      const distanceFade = Math.max(0, 1 - Math.abs(portalDepth * 8 - index) * 0.16);
+      const pulse = (Math.sin(elapsed * 1.8 - index * 0.55) + 1) * 0.5;
+      material.opacity =
+        (activeSection === "terrain" ? 0.1 : 0.16) +
+        distanceFade * 0.42 +
+        pulse * 0.12;
+      material.color.set(index % 3 === 0 ? "#64d9ff" : "#82f7b5");
+    });
+  });
+
+  return (
+    <group ref={groupRef} position={[1.15, -0.55, 1.8]} rotation={[0.1, -0.12, -0.2]}>
+      {Array.from({ length: 11 }).map((_, index) => (
+        <mesh key={index} position={[0, 0, -1.05 - index * 0.78]}>
+          <torusGeometry args={[1.3 + index * 0.08, 0.006, 8, 140]} />
+          <meshBasicMaterial
+            ref={(material) => {
+              if (material) {
+                materialRefs.current[index] = material;
+              }
+            }}
+            color="#82f7b5"
+            transparent
+            opacity={0.12}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function AtmosphereWorld({ activeSection, progress }: FieldSceneProps) {
+  const earthRef = useRef<THREE.Mesh>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
+  const earthMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const glowMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const reveal = smoothstep(0.35, 0.66, progress);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (earthRef.current) {
+      earthRef.current.rotation.y = elapsed * 0.025 + progress * 0.8;
+      earthRef.current.rotation.z = -0.28 + progress * 0.18;
+      earthRef.current.position.x = 2.95 - reveal * 1.2;
+      earthRef.current.position.y = -1.25 + reveal * 0.55;
+    }
+
+    if (glowRef.current) {
+      glowRef.current.rotation.copy(earthRef.current?.rotation ?? new THREE.Euler());
+      glowRef.current.position.copy(earthRef.current?.position ?? new THREE.Vector3());
+      glowRef.current.scale.setScalar(1.02 + Math.sin(elapsed * 0.7) * 0.01);
+    }
+
+    if (earthMaterialRef.current) {
+      earthMaterialRef.current.opacity = reveal * (activeSection === "terrain" ? 0.5 : 0.34);
+    }
+
+    if (glowMaterialRef.current) {
+      glowMaterialRef.current.opacity = reveal * 0.34;
+    }
+  });
+
+  return (
+    <>
+      <mesh ref={earthRef} position={[2.95, -1.25, -6.8]}>
+        <sphereGeometry args={[2.35, 48, 32]} />
+        <meshBasicMaterial
+          ref={earthMaterialRef}
+          color="#173f43"
+          wireframe
+          transparent
+          opacity={0}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh ref={glowRef} position={[2.95, -1.25, -6.8]}>
+        <sphereGeometry args={[2.52, 48, 32]} />
+        <meshBasicMaterial
+          ref={glowMaterialRef}
+          color="#64d9ff"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+    </>
+  );
+}
+
+function MountainHorizon({ activeSection, progress }: FieldSceneProps) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const reveal = smoothstep(0.58, 0.88, progress);
+
+  const geometry = useMemo(() => {
+    const vertices: number[] = [];
+    const width = 9.5;
+    const segments = 18;
+
+    for (let index = 0; index < segments; index += 1) {
+      const left = -width / 2 + (index / segments) * width;
+      const right = -width / 2 + ((index + 1) / segments) * width;
+      const middle = (left + right) / 2;
+      const base = -2.35;
+      const height =
+        -1.55 +
+        Math.sin(index * 1.7) * 0.35 +
+        Math.sin(index * 0.53) * 0.22;
+
+      vertices.push(left, base, -5.55);
+      vertices.push(middle, height, -5.35 - (index % 3) * 0.18);
+      vertices.push(right, base, -5.55);
+    }
+
+    const mountain = new THREE.BufferGeometry();
+    mountain.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    mountain.computeVertexNormals();
+    return mountain;
+  }, []);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (meshRef.current) {
+      meshRef.current.position.y = -0.05 + reveal * 0.45;
+      meshRef.current.position.x = -0.65 - progress * 0.4;
+      meshRef.current.rotation.z = -0.03 + Math.sin(elapsed * 0.2) * 0.01;
+    }
+
+    if (materialRef.current) {
+      materialRef.current.opacity = reveal * (activeSection === "terrain" ? 0.72 : 0.44);
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} geometry={geometry} position={[-0.65, -0.05, 0]}>
+      <meshBasicMaterial
+        ref={materialRef}
+        color="#82f7b5"
+        transparent
+        opacity={0}
+        wireframe
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </mesh>
+  );
 }
 
 function TerrainSurface({ activeSection, progress }: FieldSceneProps) {
@@ -361,6 +558,99 @@ function RouteLine({ activeSection, progress }: FieldSceneProps) {
   );
 }
 
+function RouteBeacons({ activeSection, progress }: FieldSceneProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const materialRefs = useRef<THREE.MeshBasicMaterial[]>([]);
+
+  const lineGeometry = useMemo(() => {
+    const geometry = new THREE.BufferGeometry().setFromPoints(
+      routeStops.map(({ position }) => position),
+    );
+    return geometry;
+  }, []);
+  const lineMaterial = useMemo(
+    () =>
+      new THREE.LineBasicMaterial({
+        color: "#82f7b5",
+        transparent: true,
+        opacity: 0.36,
+        blending: THREE.AdditiveBlending,
+      }),
+    [],
+  );
+  const lineObject = useMemo(
+    () => new THREE.Line(lineGeometry, lineMaterial),
+    [lineGeometry, lineMaterial],
+  );
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (groupRef.current) {
+      groupRef.current.position.x = 1.45 - progress * 1.4;
+      groupRef.current.position.y = -0.06 + progress * 0.36;
+      groupRef.current.rotation.z = -0.07 + progress * 0.24;
+    }
+
+    materialRefs.current.forEach((material, index) => {
+      const stop = routeStops[index];
+      const isActive = stop.id === activeSection;
+      const pulse = (Math.sin(elapsed * 2.5 + index) + 1) * 0.5;
+      material.opacity = isActive ? 0.82 : 0.32 + pulse * 0.18;
+      material.color.set(isActive ? sectionAccent[activeSection] : "#d7fff0");
+    });
+
+    lineMaterial.opacity = activeSection === "basecamp" ? 0.24 : 0.48;
+    lineMaterial.color.set(activeSection === "signal" ? "#64d9ff" : "#82f7b5");
+  });
+
+  return (
+    <group ref={groupRef} position={[1.45, -0.06, 0.25]} rotation={[0.03, -0.05, -0.07]}>
+      <primitive object={lineObject} />
+      {routeStops.map((stop, index) => (
+        <group key={stop.id} position={stop.position}>
+          <mesh>
+            <sphereGeometry args={[0.075, 18, 18]} />
+            <meshBasicMaterial
+              ref={(material) => {
+                if (material) {
+                  materialRefs.current[index] = material;
+                }
+              }}
+              color="#d7fff0"
+              transparent
+              opacity={0.42}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+          <Text
+            position={[0.16, 0.08, 0]}
+            anchorX="left"
+            anchorY="middle"
+            color={stop.id === activeSection ? sectionAccent[activeSection] : "#d7fff0"}
+            fontSize={0.18}
+            letterSpacing={0.08}
+            maxWidth={1.7}
+            outlineColor="#050809"
+            outlineWidth={0.006}
+          >
+            {stop.label}
+          </Text>
+          <Html
+            position={[0.16, -0.08, 0]}
+            center={false}
+            distanceFactor={8}
+            className={`field-beacon ${stop.id === activeSection ? "is-active" : ""}`}
+          >
+            <span>{index + 1 < 10 ? `0${index + 1}` : index + 1}</span>
+          </Html>
+        </group>
+      ))}
+    </group>
+  );
+}
+
 function ScanRings({ activeSection, progress }: FieldSceneProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRefs = useRef<THREE.MeshBasicMaterial[]>([]);
@@ -543,11 +833,15 @@ function SceneContents(props: FieldSceneProps) {
     <>
       <fog attach="fog" args={["#050809", 7, 18]} />
       <CameraRig {...props} />
+      <PortalTunnel {...props} />
+      <AtmosphereWorld {...props} />
+      <MountainHorizon {...props} />
       <ScanRings {...props} />
       <TerrainSurface {...props} />
       <SignalParticles {...props} />
       <ScrollSparks {...props} />
       <RouteLine {...props} />
+      <RouteBeacons {...props} />
       <NatureGrowth {...props} />
       <StormHalo {...props} />
     </>

@@ -242,8 +242,14 @@ function App() {
                 Traveller / Software Engineer / Site Reliability Engineer
               </p>
               <p className="hero-statement">
-                Building reliable systems from shifting terrain.
+                Entering a reliability field from signal to peak.
               </p>
+              <div className="hero-actions">
+                <a className="route-cta" href="#descent">
+                  Read the route
+                </a>
+                <span className="route-depth">Depth path / signal to peak</span>
+              </div>
             </div>
 
             <div className="system-orbit" aria-hidden="true">
@@ -264,8 +270,8 @@ function App() {
           title="Before I move, I read the signals."
         >
           <p className="section-lede">
-            Logs, traces, symptoms, pressure. The interface starts as a grid,
-            then the signal begins to behave like weather.
+            Logs, traces, symptoms, pressure. The interface opens into a signal
+            universe, and the route starts pulling forward.
           </p>
           <div className="signal-grid">
             <article>
@@ -289,17 +295,17 @@ function App() {
         <SceneSection
           id="descent"
           label="Route 03 / Descent"
-          eyebrow="FIELD: TRANSLATING"
-          title="The map stops being flat."
+          eyebrow="ATMOSPHERE: DETECTED"
+          title="The route leaves the screen."
         >
           <div className="field-note-stack">
             <p className="field-note">
-              The terminal layer falls away. Signals stretch into ridgelines,
-              routes become rivers, and reliability starts to feel physical.
+              The terminal layer falls away. The signal field bends into depth,
+              atmosphere, and terrain.
             </p>
             <p className="field-note">
-              This is the world of the portfolio: software practice translated
-              into a living landscape.
+              This is the portfolio world: software practice becoming a
+              climbable landscape.
             </p>
           </div>
         </SceneSection>
@@ -308,16 +314,16 @@ function App() {
           id="terrain"
           label="Route 04 / Living Terrain"
           eyebrow="NATURE: RESOLVING"
-          title="A system becomes a place."
+          title="Journey to the peak."
         >
           <p className="section-lede">
-            Later, this section can hold projects. For now it is here to prove
-            the cinematic transition: tech grid, signal field, then nature.
+            Later, real projects can live as field stations along this route.
+            For now, the job is to make the world feel worth entering.
           </p>
           <div className="nature-marker-grid">
-            <span className="nature-marker">ridgelines / infrastructure</span>
-            <span className="nature-marker">stars / observability</span>
-            <span className="nature-marker">weather / reliability</span>
+            <a className="nature-marker" href="#descent">journey to the peak</a>
+            <a className="nature-marker" href="#signal">signal reading</a>
+            <a className="nature-marker" href="#contact">next coordinates</a>
           </div>
         </SceneSection>
 

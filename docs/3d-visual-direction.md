@@ -203,3 +203,21 @@ Avoid over-binding every small 3D property directly to React state. For animatio
 Use a procedural sci-fi terrain/signal field instead of a heavy 3D model. This is more flexible, more personal, and more aligned with the portfolio story.
 
 Implemented first: lazy-loaded `FieldScene` with transparent canvas, terrain wireframe, signal particles, route trace, and storm halo.
+
+## Current Flight Direction
+
+The scene should now evolve toward a single camera journey:
+
+```text
+tech portal -> signal universe -> atmosphere -> mountain terrain -> peak marker
+```
+
+Implemented as the first pass:
+
+- `PortalTunnel`: ring corridor for the feeling of entering the system.
+- `AtmosphereWorld`: wire/glow sphere suggesting Earth or an atmosphere layer.
+- `MountainHorizon`: procedural wire peaks as the first mountain/terrain arrival.
+- `RouteBeacons`: in-world labels for Basecamp, Signal, Descent, and Peak.
+- `CameraRig`: scroll-progress camera path instead of section-only camera shifts.
+
+Next visual improvements should focus on making the portal zoom and mountain arrival more physical before adding more portfolio content.
