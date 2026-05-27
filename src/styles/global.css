@@ -421,7 +421,8 @@ p {
   padding: 1.2rem;
   background:
     linear-gradient(180deg, rgba(130, 247, 181, 0.09), transparent),
-    rgba(5, 8, 9, 0.78);
+    rgba(5, 8, 9, 0.58);
+  backdrop-filter: blur(5px);
 }
 
 .signal-grid span {
@@ -453,7 +454,8 @@ p {
   position: relative;
   min-height: 20rem;
   padding: 1.2rem;
-  background: rgba(5, 8, 9, 0.78);
+  background: rgba(5, 8, 9, 0.58);
+  backdrop-filter: blur(5px);
 }
 
 .terrain-dot {
@@ -485,7 +487,8 @@ p {
   border: 1px solid rgba(238, 246, 242, 0.12);
   background:
     linear-gradient(160deg, rgba(100, 217, 255, 0.08), transparent 44%),
-    rgba(5, 8, 9, 0.72);
+    rgba(5, 8, 9, 0.58);
+  backdrop-filter: blur(5px);
 }
 
 .expedition-route {
@@ -535,7 +538,8 @@ p {
 .storm-protocol span {
   min-height: 8rem;
   padding: 1rem;
-  background: rgba(5, 8, 9, 0.82);
+  background: rgba(5, 8, 9, 0.62);
+  backdrop-filter: blur(5px);
   color: var(--color-ember);
   font-family: var(--font-mono);
   text-transform: uppercase;
